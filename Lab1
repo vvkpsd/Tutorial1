@@ -1,0 +1,105 @@
+Step 1
+
+Create a pod object using kubectl run command with google's sample image: gcr.io/google-samples/kubernetes-bootcamp:v1 and expose it on port 8880, name the pod as firstapp.
+
+Check if the pod creation is successful by running the command: kubectl get pod firstapp
+
+Step 2
+
+Expose the application to the local VM by creating a Service object of type NodePort.
+
+Check if the service is created by running the command: kubectl get svc firstapp
+
+Step 3
+
+Create another deployment using a "YAML" file, create a deployment.yaml file that contains information of the number of replicas and the images to be used. Use an nginx image to deploy. Name the deployment as 'nginx'
+
+Check if the deployment is created by running the command: kubectl get deployment nginx
+
+Step 4
+
+Create a NodePort type service using a 'YAML file, create a service.yaml file that contains information of the type of service and the port numbers. Name the Serv nginx-svc and use port 30888 for nodePort. I
+
+Check if the service is created by running the command: kubectl get svc nginx-svc
+
+Step 5
+
+Use kubectl exec command to get inside the running nginx pod and write the string 'Welcome to fresco nginx pod to /usr/share/nginx/html/index.htal file
+
+ChatGPT
+Here are the steps you provided broken down:
+
+Step 1: Create a pod object named 'firstapp'
+
+bash
+Copy code
+kubectl run firstapp --image=gcr.io/google-samples/kubernetes-bootcamp:v1 --port=8880
+kubectl get pod firstapp
+Step 2: Expose the application with a Service object of type NodePort
+
+bash
+Copy code
+kubectl expose pod firstapp --type=NodePort --port=8880 --name=firstapp-svc
+kubectl get svc firstapp-svc
+Step 3: Create a deployment using a YAML file
+Create a file named deployment.yaml with the following content:
+
+yaml
+Copy code
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+Then run:
+
+bash
+Copy code
+kubectl apply -f deployment.yaml
+kubectl get deployment nginx
+Step 4: Create a NodePort type service using a YAML file
+Create a file named service.yaml with the following content:
+
+yaml
+Copy code
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30888
+  selector:
+    app: nginx
+Then run:
+
+bash
+Copy code
+kubectl apply -f service.yaml
+kubectl get svc nginx-svc
+Step 5: Use kubectl exec command to write to a file inside the running nginx pod
+
+bash
+Copy code
+kubectl exec -it <nginx-pod-name> -- sh -c 'echo "Welcome to fresco nginx pod" > /usr/share/nginx/html/index.html'
+Replace <nginx-pod-name> with the actual name of your nginx pod.
+
+
+
+
+
